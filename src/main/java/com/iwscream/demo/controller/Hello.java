@@ -8,15 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @Controller
 @RequestMapping("/")
 public class Hello {
 
-    @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    public Hello(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("hello.php")
     @ResponseBody
