@@ -6,7 +6,7 @@ import com.iwscream.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> selectAll() {
+    public ArrayList<User> selectAll() {
         return userMapper.selectAll();
     }
 
