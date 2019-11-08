@@ -23,7 +23,7 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!--生成mapper.xml-->
-        <sqlMapGenerator targetPackage="com.iwscream.demo.mapper" targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="./mapper" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
