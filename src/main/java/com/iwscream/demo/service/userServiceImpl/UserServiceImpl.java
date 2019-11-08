@@ -5,6 +5,8 @@ import com.iwscream.demo.model.User;
 import com.iwscream.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -34,6 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ArrayList<User> selectAll() {
         return userMapper.selectAll();
     }

@@ -19,6 +19,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+
     <import resource="classpath:spring-mybatis.xml" />
 
 </beans>

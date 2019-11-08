@@ -28,8 +28,13 @@ public class Hello {
         String[] arr = new String[3];
         arr[1] = "haha";
         arr[2] = "xixi";
-        for (User user :userService.selectAll()){
-            arr[0] = user.getUsername();
+        try {
+            for (User user :userService.selectAll()){
+                arr[0] = user.getUsername();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return "error!!";
         }
         return Arrays.toString(arr);
     }
