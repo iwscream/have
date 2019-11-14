@@ -13,6 +13,8 @@
     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
     <!-- 扫描controller（controller层注入） -->
+    <!-- 这里直接在springMVC这个子容器中扫描，不在spring父容器中扫描，避免事务失效-->
+    <context:annotation-config/>
     <context:component-scan base-package="com.iwscream.demo.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
