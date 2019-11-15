@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int deleteByPrimaryKey(Integer userId) {
         return userMapper.deleteByPrimaryKey(userId);
     }
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User selectByPrimaryKey(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
     }
