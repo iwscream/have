@@ -4,6 +4,7 @@ package com.iwscream.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.iwscream.demo.model.User;
 import com.iwscream.demo.service.userServiceImpl.UserServiceImpl;
+import com.iwscream.demo.util.JsonOp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class Hello {
         return result;
     }
 
-    @RequestMapping(value = "select_user_id.php", method = RequestMethod.GET)
+    @RequestMapping(value = "select_user_id.php", method = RequestMethod.POST)
     public String select_id(@RequestParam Integer id){
         User user = null;
         try{
@@ -47,6 +48,12 @@ public class Hello {
             ex.printStackTrace();
             return null;
         }
-        return new JSONObject().toJSONString(user);
+        return JsonOp.o2j(user);
+    }
+
+    @RequestMapping(value = "insert_user.php", method = RequestMethod.GET)
+    public String insert_user(@RequestBody User user){
+        int num = userService.insert(user);
+        return Integer.toString(num);
     }
 }

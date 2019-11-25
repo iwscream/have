@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int insert(User record) {
         return userMapper.insert(record);
     }
@@ -39,11 +40,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ArrayList<User> selectAll() {
+    public List<User> selectAll() {
         return userMapper.selectAll();
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int updateByPrimaryKey(User record) {
         return userMapper.updateByPrimaryKey(record);
     }

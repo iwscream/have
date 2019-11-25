@@ -3,9 +3,9 @@ package com.iwscream.demo.service;
 import com.iwscream.demo.mapper.UserMapper;
 import com.iwscream.demo.model.User;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface UserService extends UserMapper {
 
-    ArrayList<User> selectAll();
+    List<User> selectAll();
 }

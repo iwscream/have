@@ -11,12 +11,23 @@
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
         <property name="mergeable" value="false"/>
+
+
+        <commentGenerator>
+            <property name="suppressAllComment" value="true"/><!--是否取消注释-->
+            <property name="suppressData" value="true"/><!--是否生成注释代时间戳-->
+        </commentGenerator>
         <!--数据库连接地址-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/have_user?characterEncoding=UTF-8&amp;nullCatalogMeansCurrent=true"
                         userId="root"
                         password="123456">
         </jdbcConnection>
+        <!--类型转换-->
+        <javaTypeResolver>
+            <!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
         <!--生成实体类（注意修改包路径）-->
         <javaModelGenerator targetPackage="com.iwscream.demo.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
@@ -31,10 +42,16 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.iwscream.demo.mapper"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
-
-            <!--数据库中的表名称和对应的实体类名称-->
         </javaClientGenerator>
-        <table schema="have_user" tableName="user" domainObjectName="User"/>
+        <!--数据库中的表名称和对应的实体类名称-->
+        <table schema="have_user" tableName="user" domainObjectName="User"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true">
+            <property name="useActualColumnNames" value="true"/>
+            <generatedKey column="user_id" sqlStatement="MySql" identity="true"/>
+        </table>
 
     </context>
 </generatorConfiguration>
