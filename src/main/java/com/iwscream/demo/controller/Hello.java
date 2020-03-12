@@ -39,7 +39,7 @@ public class Hello {
         return result;
     }
 
-    @RequestMapping(value = "select_user_id.php", method = RequestMethod.POST)
+    @RequestMapping(value = "select_user_id.php", method = RequestMethod.GET)
     public String select_id(@RequestParam Integer id){
         User user = null;
         try{
@@ -51,7 +51,7 @@ public class Hello {
         return JsonOp.o2j(user);
     }
 
-    @RequestMapping(value = "insert_user.php", method = RequestMethod.GET)
+    @RequestMapping(value = "insert_user.php", method = RequestMethod.POST)
     public String insert_user(@RequestBody User user){
         int num = userService.insert(user);
         return Integer.toString(num);
