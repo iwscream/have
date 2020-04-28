@@ -18,7 +18,7 @@
     </bean>
 
     <!-- 创建Redis连接池，并做相关配置 -->
-    <bean id="jedisWritePool" class="com.mlr.controller.cache.JedisPoolWriper"
+    <bean id="jedisWritePool" class="com.iwscream.demo.controller.cache.JedisPoolWriper"
           depends-on="jedisPoolConfig">
         <constructor-arg index="0" ref="jedisPoolConfig" />
         <constructor-arg index="1" value="${redis.hostname}" />
@@ -26,33 +26,33 @@
     </bean>
 
     <!-- 创建Redis工具类，封装好Redis的连接以进行相关的操作 -->
-    <bean id="jedisUtil" class="com.mlr.controller.cache.JedisUtil" scope="singleton">
+    <bean id="jedisUtil" class="com.iwscream.demo.controller.cache.JedisUtil" scope="singleton">
         <property name="jedisPool">
             <ref bean="jedisWritePool" />
         </property>
     </bean>
     <!-- Redis的key操作 -->
-    <bean id="jedisKeys" class="com.mlr.controller.cache.JedisUtil$Keys"
+    <bean id="jedisKeys" class="com.iwscream.demo.controller.cache.JedisUtil$Keys"
           scope="singleton">
         <constructor-arg ref="jedisUtil"></constructor-arg>
     </bean>
     <!-- Redis的Strings操作 -->
-    <bean id="jedisStrings" class="com.mlr.controller.cache.JedisUtil$Strings"
+    <bean id="jedisStrings" class="com.iwscream.demo.controller.cache.JedisUtil$Strings"
           scope="singleton">
         <constructor-arg ref="jedisUtil"></constructor-arg>
     </bean>
     <!-- Redis的Lists操作 -->
-    <bean id="jedisLists" class="com.mlr.controller.cache.JedisUtil$Lists"
+    <bean id="jedisLists" class="com.iwscream.demo.controller.cache.JedisUtil$Lists"
           scope="singleton">
         <constructor-arg ref="jedisUtil"></constructor-arg>
     </bean>
     <!-- Redis的Sets操作 -->
-    <bean id="jedisSets" class="com.mlr.controller.cache.JedisUtil$Sets"
+    <bean id="jedisSets" class="com.iwscream.demo.controller.cache.JedisUtil$Sets"
           scope="singleton">
         <constructor-arg ref="jedisUtil"></constructor-arg>
     </bean>
     <!-- Redis的HashMap操作 -->
-    <bean id="jedisHash" class="com.mlr.controller.cache.JedisUtil$Hash"
+    <bean id="jedisHash" class="com.iwscream.demo.controller.cache.JedisUtil$Hash"
           scope="singleton">
         <constructor-arg ref="jedisUtil"></constructor-arg>
     </bean>
