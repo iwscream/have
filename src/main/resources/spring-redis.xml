@@ -5,6 +5,9 @@
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="redis.properties"/>
+
     <!-- Redis连接池的设置 -->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <!-- 控制一个pool可分配多少个jedis实例 -->
@@ -27,33 +30,31 @@
 
     <!-- 创建Redis工具类，封装好Redis的连接以进行相关的操作 -->
     <bean id="jedisUtil" class="com.iwscream.demo.controller.cache.JedisUtil" scope="singleton">
-        <property name="jedisPool">
-            <ref bean="jedisWritePool" />
-        </property>
+        <property name="jedisPool" ref="jedisWritePool"/>
     </bean>
     <!-- Redis的key操作 -->
     <bean id="jedisKeys" class="com.iwscream.demo.controller.cache.JedisUtil$Keys"
           scope="singleton">
-        <constructor-arg ref="jedisUtil"></constructor-arg>
+        <constructor-arg ref="jedisUtil"/>
     </bean>
     <!-- Redis的Strings操作 -->
     <bean id="jedisStrings" class="com.iwscream.demo.controller.cache.JedisUtil$Strings"
           scope="singleton">
-        <constructor-arg ref="jedisUtil"></constructor-arg>
+        <constructor-arg ref="jedisUtil"/>
     </bean>
     <!-- Redis的Lists操作 -->
     <bean id="jedisLists" class="com.iwscream.demo.controller.cache.JedisUtil$Lists"
           scope="singleton">
-        <constructor-arg ref="jedisUtil"></constructor-arg>
+        <constructor-arg ref="jedisUtil"/>
     </bean>
     <!-- Redis的Sets操作 -->
     <bean id="jedisSets" class="com.iwscream.demo.controller.cache.JedisUtil$Sets"
           scope="singleton">
-        <constructor-arg ref="jedisUtil"></constructor-arg>
+        <constructor-arg ref="jedisUtil"/>
     </bean>
     <!-- Redis的HashMap操作 -->
     <bean id="jedisHash" class="com.iwscream.demo.controller.cache.JedisUtil$Hash"
           scope="singleton">
-        <constructor-arg ref="jedisUtil"></constructor-arg>
+        <constructor-arg ref="jedisUtil"/>
     </bean>
 </beans>

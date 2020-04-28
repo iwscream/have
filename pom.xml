@@ -28,7 +28,6 @@
     </dependency>
 
 
-
 <!--    spring MVC依赖-->
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
     <dependency>
@@ -192,6 +191,26 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <!--防止idea加载不到xml或者properties文件开始-->
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
   </build>
 
 </project>
