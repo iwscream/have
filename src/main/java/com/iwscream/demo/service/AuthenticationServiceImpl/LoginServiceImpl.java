@@ -1,25 +1,46 @@
 package com.iwscream.demo.service.AuthenticationServiceImpl;
 
 import com.google.protobuf.Descriptors;
+import com.iwscream.demo.controller.cache.JedisPoolWriper;
 import com.iwscream.demo.controller.cache.JedisUtil;
 import com.iwscream.demo.util.JsonOp;
 import com.sun.javafx.geom.Area;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
 import java.util.*;
 
 public class LoginServiceImpl {
 
-//    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String getKey(){
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String setKey(String key, String value){
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        JedisPoolWriper jedisPoolWriper = new JedisPoolWriper(jedisPoolConfig,"127.0.0.1",6379);
         JedisUtil util = new JedisUtil();
-        Jedis jedis = new Jedis("127.0.0.1", 6379);
-        jedis.set("key", "value");
+        util.setJedisPool(jedisPoolWriper);
+        Jedis jedis = util.getJedis();
+        String status = jedis.set(key,value);
+        System.out.println(status);
+        jedis.expire("key",60);
+        jedis.close();
+        return status;
+    }
 
-        return jedis.get("key");
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String getKey(String key){
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        JedisPoolWriper jedisPoolWriper = new JedisPoolWriper(jedisPoolConfig,"127.0.0.1",6379);
+        JedisUtil util = new JedisUtil();
+        util.setJedisPool(jedisPoolWriper);
+        Jedis jedis = util.getJedis();
+        String value = jedis.get(key);
+        System.out.println(jedis.exists(key));
+        jedis.close();
+
+        return value;
     }
 
     public static void main(String[] args) {

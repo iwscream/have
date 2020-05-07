@@ -60,8 +60,14 @@ public class Hello {
     }
 
     @RequestMapping(value = "getk", method = RequestMethod.GET)
-    public String getK(){
+    public String getK(String k){
         loginService = new LoginServiceImpl();
-        return loginService.getKey();
+        return loginService.getKey(k);
+    }
+
+    @RequestMapping(value = "setk", method = RequestMethod.GET)
+    public String setK(String k, String v){
+        loginService = new LoginServiceImpl();
+        return loginService.setKey(k, v);
     }
 }

@@ -16,7 +16,7 @@ public class JedisUtil {
     /**
      * 缓存生存时间
      */
-    private final int expire = 300000;
+    private final int expire = 6000;
     /**
      * 操作Key的方法
      */
