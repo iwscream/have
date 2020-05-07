@@ -1,5 +1,6 @@
 package com.iwscream.demo.controller.cache;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.BinaryClient;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -15,7 +16,7 @@ public class JedisUtil {
     /**
      * 缓存生存时间
      */
-    private final int expire = 60000;
+    private final int expire = 300000;
     /**
      * 操作Key的方法
      */
@@ -65,8 +66,6 @@ public class JedisUtil {
 
     /**
      * 设置过期时间
-     *
-     * @author xiangze
      */
     public void expire(String key, int seconds) {
         if (seconds <= 0) {
@@ -79,8 +78,6 @@ public class JedisUtil {
 
     /**
      * 设置默认过期时间
-     *
-     * @author xiangze
      */
     public void expire(String key) {
         expire(key, expire);
@@ -89,8 +86,7 @@ public class JedisUtil {
     // *******************************************Keys*******************************************//
     public class Keys {
 
-        public Keys(JedisUtil jedisUtil) {
-        }
+        public Keys(JedisUtil jedisUtil) {}
 
         /**
          * 清空所有key
@@ -107,7 +103,7 @@ public class JedisUtil {
          *
          * @return 状态码
          */
-        public String rename(String oldkey, String newkey) {
+        public String renamenx(String oldkey, String newkey) {
             return rename(SafeEncoder.encode(oldkey), SafeEncoder.encode(newkey));
         }
 
@@ -116,7 +112,7 @@ public class JedisUtil {
          *
          * @return 状态码
          */
-        public long renamenx(String oldkey, String newkey) {
+        public long rename(String oldkey, String newkey) {
             Jedis jedis = getJedis();
             long status = jedis.renamenx(oldkey, newkey);
             jedis.close();
