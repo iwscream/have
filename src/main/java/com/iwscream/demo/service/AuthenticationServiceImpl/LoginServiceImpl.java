@@ -1,19 +1,60 @@
 package com.iwscream.demo.service.AuthenticationServiceImpl;
 
-import com.google.protobuf.Descriptors;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.iwscream.demo.controller.cache.JedisPoolWriper;
 import com.iwscream.demo.controller.cache.JedisUtil;
-import com.iwscream.demo.util.JsonOp;
-import com.sun.javafx.geom.Area;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 public class LoginServiceImpl {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String getSessionKey(String code) throws IOException {
+        StringBuilder json = new StringBuilder();
+
+        URL url = new URL("https://api.weixin.qq.com/sns/jscode2session");
+        URLConnection connection = url.openConnection();
+
+        connection.addRequestProperty("appid","wx1f3a0d2aba49f29f");
+        connection.addRequestProperty("secret", "");
+        connection.addRequestProperty("js_code", code);
+        connection.addRequestProperty("grant_type", "authorization_code");
+
+        connection.connect();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        String temp;
+        while ((temp = in.readLine()) != null){
+            json.append(temp);
+        }
+
+        JSONObject jsonTemp = JSONObject.parseObject(json.toString());
+
+        JSONObject object = new JSONObject();
+        object.put("openid", jsonTemp.get("openid"));
+        object.put("session_key", jsonTemp.get("session_key"));
+        object.put("unionid", jsonTemp.get("unionid"));
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("errcode", jsonTemp.get("errcode"));
+        jsonObject.put("data", object);
+        jsonObject.put("errmsg", jsonTemp.get("errmsg"));
+
+        setKey(jsonTemp.getString("session_key"), "ok");
+
+        return jsonObject.toJSONString();
+    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String setKey(String key, String value){
