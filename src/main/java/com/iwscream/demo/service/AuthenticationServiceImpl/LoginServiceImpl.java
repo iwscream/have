@@ -19,26 +19,38 @@ import java.util.*;
 public class LoginServiceImpl {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String getSessionKey(String code) throws IOException {
+    public String getSessionKey(String code){
         StringBuilder json = new StringBuilder();
+        BufferedReader in = null;
 
-        URL url = new URL("https://api.weixin.qq.com/sns/jscode2session");
-        URLConnection connection = url.openConnection();
+        try {
+            URL url = new URL("https://api.weixin.qq.com/sns/jscode2session");
+            URLConnection connection = url.openConnection();
 
-        connection.addRequestProperty("appid","wx1f3a0d2aba49f29f");
-        connection.addRequestProperty("secret", "");
-        connection.addRequestProperty("js_code", code);
-        connection.addRequestProperty("grant_type", "authorization_code");
+            connection.addRequestProperty("appid", "wx1f3a0d2aba49f29f");
+            connection.addRequestProperty("secret", "823daf4218afeeca40e70f1ebb9e0efd");
+            connection.addRequestProperty("js_code", code);
+            connection.addRequestProperty("grant_type", "authorization_code");
 
-        connection.connect();
+            connection.connect();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-        String temp;
-        while ((temp = in.readLine()) != null){
-            json.append(temp);
+            String temp;
+            while ((temp = in.readLine()) != null) {
+                json.append(temp);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            if (in != null){
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
         JSONObject jsonTemp = JSONObject.parseObject(json.toString());
 
         JSONObject object = new JSONObject();
@@ -65,7 +77,7 @@ public class LoginServiceImpl {
         Jedis jedis = util.getJedis();
         String status = jedis.set(key,value);
         System.out.println(status);
-        jedis.expire("key",60);
+        util.expire(key);
         jedis.close();
         return status;
     }

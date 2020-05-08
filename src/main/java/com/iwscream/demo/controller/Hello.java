@@ -70,4 +70,10 @@ public class Hello {
         loginService = new LoginServiceImpl();
         return loginService.setKey(k, v);
     }
+
+    @RequestMapping(value = "get_session_key", method = RequestMethod.GET)
+    public String getSK(String code){
+        loginService = new LoginServiceImpl();
+        return loginService.getSessionKey(code);
+    }
 }
