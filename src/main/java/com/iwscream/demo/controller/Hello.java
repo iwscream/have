@@ -1,13 +1,11 @@
 package com.iwscream.demo.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.iwscream.demo.model.User;
 import com.iwscream.demo.service.AuthenticationServiceImpl.LoginServiceImpl;
 import com.iwscream.demo.service.userServiceImpl.UserServiceImpl;
-import com.iwscream.demo.util.JsonOp;
+import com.iwscream.demo.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,7 +48,7 @@ public class Hello {
             ex.printStackTrace();
             return null;
         }
-        return JsonOp.o2j(user);
+        return JsonUtil.o2j(user);
     }
 
     @RequestMapping(value = "insert_user.php", method = RequestMethod.POST)
