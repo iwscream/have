@@ -66,7 +66,7 @@ public class Hello {
     @RequestMapping(value = "setk", method = RequestMethod.GET)
     public String setK(String k, String v){
         loginService = new LoginServiceImpl();
-        return loginService.setKey(k, v);
+        return String.valueOf(loginService.setKey(k, v));
     }
 
     @RequestMapping(value = "get_session_key", method = RequestMethod.GET)

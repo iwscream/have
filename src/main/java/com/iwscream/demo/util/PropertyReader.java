@@ -1,20 +1,18 @@
 package com.iwscream.demo.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Properties;
 
 public class PropertyReader {
 
     public String get(String filename, String propertyKey){
         try {
-            InputStream in = this.getClass().getResourceAsStream(filename);
             Properties properties = new Properties();
-            InputStreamReader inputStreamReader = new InputStreamReader(in);
-            properties.load(inputStreamReader);
-
+            // 使用ClassLoader加载properties配置文件生成对应的输入流
+            InputStream in = PropertyReader.class.getClassLoader().getResourceAsStream(filename);
+            // 使用properties对象加载输入流
+            properties.load(in);
+            //获取key对应的value值
             return properties.getProperty(propertyKey);
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,9 +1,7 @@
 package com.iwscream.demo.service.AuthenticationServiceImpl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.iwscream.demo.controller.cache.JedisPoolWriper;
-import com.iwscream.demo.controller.cache.JedisUtil;
+import com.iwscream.demo.util.RedisUtil;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
@@ -63,35 +61,24 @@ public class LoginServiceImpl {
         jsonObject.put("data", object);
         jsonObject.put("errmsg", jsonTemp.get("errmsg"));
 
+        System.out.println(jsonTemp.getString("session_key"));
         setKey(jsonTemp.getString("session_key"), "ok");
 
         return jsonObject.toJSONString();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String setKey(String key, String value){
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        JedisPoolWriper jedisPoolWriper = new JedisPoolWriper(jedisPoolConfig,"127.0.0.1",6379);
-        JedisUtil util = new JedisUtil();
-        util.setJedisPool(jedisPoolWriper);
-        Jedis jedis = util.getJedis();
-        String status = jedis.set(key,value);
+    public Long setKey(String key, String value){
+        Long status = RedisUtil.setnx(key, value, 6000);
         System.out.println(status);
-        util.expire(key);
-        jedis.close();
+
         return status;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String getKey(String key){
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        JedisPoolWriper jedisPoolWriper = new JedisPoolWriper(jedisPoolConfig,"127.0.0.1",6379);
-        JedisUtil util = new JedisUtil();
-        util.setJedisPool(jedisPoolWriper);
-        Jedis jedis = util.getJedis();
-        String value = jedis.get(key);
-        System.out.println(jedis.exists(key));
-        jedis.close();
+        String value = RedisUtil.get(key);
+        System.out.println(value);
 
         return value;
     }

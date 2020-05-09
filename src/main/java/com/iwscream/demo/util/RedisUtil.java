@@ -28,7 +28,7 @@ public class RedisUtil {
     //超时时间
     private static final int TIMEOUT = 10 * 1000;
 
-    private static JedisPool jedisPool = null;
+    private static JedisPool jedisPool;
 
     /**
      * Jedis实例获取返回码
@@ -42,24 +42,30 @@ public class RedisUtil {
         public static final String FAIL_STRING = "-5";
     }
 
+    /**
+     * 初始化连接池
+     * */
+    static {
+        poolInit();
+    }
 
     private static void initialPool() {
         PropertyReader propertyReader = new PropertyReader();
         //Redis服务器IP
-        String HOST = propertyReader.get("redis.properties","redis.native.host");
+        String HOST = propertyReader.get("redis.properties","redis.hostname");
         //Redis的端口号
-        int PORT = NumberUtils.toInt(propertyReader.get("redis.properties","redis.native.port"), 6379);
+        int PORT = NumberUtils.toInt(propertyReader.get("redis.properties","redis.port"), 6379);
         //访问密码
-        String AUTH = propertyReader.get("redis.properties","redis.native.password");
+        String AUTH = propertyReader.get("redis.properties","redis.password");
 
         try {
             JedisPoolConfig config = new JedisPoolConfig();
             //最大连接数，如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
-            config.setMaxTotal(NumberUtils.toInt(propertyReader.get("redis.properties","redis.native.maxTotal"), 400));
+            config.setMaxTotal(NumberUtils.toInt(propertyReader.get("redis.properties","redis.pool.maxActive"), 400));
             //最大空闲数，控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
-            config.setMaxIdle(NumberUtils.toInt(propertyReader.get("redis.properties","redis.native.maxIdle"), 50));
+            config.setMaxIdle(NumberUtils.toInt(propertyReader.get("redis.properties","redis.pool.maxIdle"), 50));
             //最小空闲数
-            config.setMinIdle(NumberUtils.toInt(propertyReader.get("redis.properties","redis.native.minIdle"), 10));
+            config.setMinIdle(NumberUtils.toInt(propertyReader.get("redis.properties","redis.pool.minIdle"), 10));
             //是否在从池中取出连接前进行检验，如果检验失败，则从池中去除连接并尝试取出另一个
             config.setTestOnBorrow(true);
             //在return给pool时，是否提前进行validate操作
@@ -76,9 +82,13 @@ public class RedisUtil {
             //等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
             config.setMaxWaitMillis(MAX_WAIT);
 
-            if (StringUtils.isNotBlank(AUTH)) {
-                jedisPool = new JedisPool(config, HOST, PORT, TIMEOUT, AUTH);
-            } else {
+            try {
+                if (StringUtils.isNotBlank(AUTH)) {
+                    jedisPool = new JedisPool(config, HOST, PORT, TIMEOUT, AUTH);
+                } else {
+                    jedisPool = new JedisPool(config, HOST, PORT, TIMEOUT);
+                }
+            }catch (Exception e){
                 jedisPool = new JedisPool(config, HOST, PORT, TIMEOUT);
             }
         } catch (Exception e) {
